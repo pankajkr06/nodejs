@@ -3,7 +3,7 @@ FROM node:12.4
 # This folder will all commands be run in, like the HOME folder
 WORKDIR /app
 # Install app dependencies
-COPY package*.json ./
+#COPY package*.json ./
 RUN npm install
 # Add our sourcecode
 ADD . /app
