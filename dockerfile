@@ -8,4 +8,4 @@ RUN npm install
 # Add our sourcecode
 ADD . /app
 # The command to start our container
-CMD node server.js
+CMD node node.js
