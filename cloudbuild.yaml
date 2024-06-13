@@ -18,8 +18,8 @@ steps:
       'run', 'deploy', 'nodejs',
       '--image', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
       '--platform', 'managed',
-      '--region', '$REGION',
-      '--project', '$TEST_PROJECT_ID',
+      '--region', 'us-central1',
+      '--project', 'phoenixproject-357518',
       '--service-account', 'cloudbuild@phoenixproject-357518.iam.gserviceaccount.com',
       '--allow-unauthenticated'
     ]
