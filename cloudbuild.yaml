@@ -1,0 +1,40 @@
+# cloudbuild.yaml
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA', '.'
+    ]
+    id: Build Docker Image
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+    ]
+    id: Push Docker Image
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', '$SERVICE_NAME',
+      '--image', 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA',
+      '--platform', 'managed',
+      '--region', '$REGION',
+      '--project', '$TEST_PROJECT_ID',
+      '--service-account', 'cloudbuild@phoenixproject-357518.iam.gserviceaccount.com',
+      '--allow-unauthenticated'
+    ]
+    id: Deploy to Cloud Run (Test)
+
+# Artifacts: Store built images in Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
+
+# Substitutions: Environment variables
+substitutions:
+  _SERVICE_NAME: 'nodejs'
+  _REGION: 'us-central1'
+  _REPO_NAME: 'pankajkr06/nodejs'
+  _TEST_PROJECT_ID: 'phoenixproject-357518'
+
+# Timeout: Optional, to set maximum build time
+timeout: '1200s'
